@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>    
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>  
+		<script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js" ></script>
+	   <script type="text/javascript" charset="utf-8">
+	   	   angular.module("my_app",["ngRoute"]) 
+			.config(["$routeProvider",function($routeProvider) {
+				$routeProvider
+				.when('/:friendName', {
+					templateUrl: 'file:///Users/usuario/Documents/eDataWorld/training/angular/view/ex1.html',
+					controller: 'my_controller'
+				})
+				.when('/home', {
+					templateUrl: 'file:///Users/usuario/Documents/eDataWorld/training/angular/view/ex1.html',
+					controller: 'my_controller'
+				}) 
+				.when('/about', {
+					templateUrl: 'file:///Users/usuario/Documents/eDataWorld/training/angular/view/ex1.html',
+					controller: 'my_controller'
+				}).
+				otherwise({
+					redirectTo: '/'
+				});
+			}]) 
+			.controller("my_controller",["$scope","$filter",function($scope,$filter) {
+				var order_by = $filter("orderBy");
+				$scope.friends_data = [
+					{name:"carlos", age:25},
+					{name:"pedro", age:24},
+					{name:"mario", age:22}
+					
+				];
+				$scope.order =function(predicate,reverse) {
+					$scope.friends_data = order_by($scope.friends_data,predicate,reverse);
+					
+				};
+				$scope.order("age",false);  
+			}]);
+	   </script> 
+	</head>
+	<body ng-app="my_app">
+		<div ng-controller="my_controller">
+			<table class="friend">
+				<tr>
+					<td><a href="#/home">home</a></td>
+					<td><a href="#/about">about</a></td>
+				</tr>
+				<tr>
+					<td ><a href="" ng-click="reverse=true; order('name',true)">name</a></td>
+					<td><a href="" ng-click="reverse=true; order('age',true)">age</a></td>
+				</tr>
+				<tr ng-repeat="friend in friends_data | filter:search">
+					<td><a href="#/{{friend.name}}">{{friend.name}}</a></td>
+					<td><a href="#/{{friend.age}}">{{friend.age}}</a></td>
+				</tr>
+			</table> 
+			search:<input type="text" name="some_name" value="" id="some_name" ng-model="search">
+			<div ng-view></div>
+		</div>
+	</body>
+</html>
